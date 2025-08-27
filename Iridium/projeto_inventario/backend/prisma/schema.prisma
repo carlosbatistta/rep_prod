@@ -1,0 +1,298 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// criar uma migration, cria as tabelas lá no BD:npx prisma migrate dev --schema=./prisma/schema.prisma
+model User {
+  id         String    @id @default(uuid())
+  name       String
+  email      String
+  password   String
+  created_at DateTime? @default(now())
+  updated_at DateTime? @default(now())
+  profile_id String
+  profile    Profile   @relation(fields: [profile_id], references: [id])
+
+  @@map("users") //nome da tabela
+}
+
+model Profile {
+  id     String   @id @default(uuid())
+  name   String
+  nivel  Int
+  users  User[]
+  access Access[]
+
+  @@map("profiles")
+}
+
+model Access {
+  id           String  @id @default(uuid())
+  permission   String
+  access_nivel String
+  profile_id   String
+  profile      Profile @relation(fields: [profile_id], references: [id])
+
+  @@map("accesses")
+}
+
+model Branch {
+  id         String    @id @default(uuid())
+  name       String
+  code       String    @unique
+  company    String
+  status     Boolean   @default(true)
+  address    Boolean   @default(false)
+  created_at DateTime? @default(now())
+  updated_at DateTime? @default(now())
+
+  @@map("branches")
+}
+
+model Storage {
+  id   String @id @default(uuid())
+  code String
+  name String
+
+  @@map("storages")
+}
+
+model Address {
+  id           String @id @default(uuid())
+  branch_code  String
+  storage_code String
+  address      String
+  description  String
+  status       Int
+
+  @@map("addresses")
+}
+
+model VirtualLocation {
+  id   String @id @default(uuid())
+  name String
+  code Int
+
+  @@map("virtual_locations")
+}
+
+model Departament {
+  id          String @id @default(uuid())
+  code        String
+  description String
+
+  @@map("departaments")
+}
+
+model Line {
+  id          String @id @default(uuid())
+  code        String
+  description String
+
+  @@map("lines")
+}
+
+model feature {
+  id          String @id @default(uuid())
+  code        String
+  description String
+
+  @@map("features")
+}
+
+model Group {
+  id          String @id @default(uuid())
+  code        String
+  description String
+
+  @@map("groups")
+}
+
+model subgroup {
+  id          String @id @default(uuid())
+  code        String
+  description String
+
+  @@map("subgroups")
+}
+
+model Product {
+  id           String @id @default(uuid())
+  name         String
+  code         String
+  codBar       String
+  description  String
+  departament  String
+  line         String
+  group        String
+  subgroup     String
+  feature      String
+  access_nivel Int
+
+  @@map("products")
+}
+
+model stock {
+  id                String   @id @default(uuid())
+  total_quantity    Int
+  addresed_quantity Int?
+  product_code      String
+  product_desc      String
+  cost              Float
+  storage_code      String
+  branch_code       String
+  reservation       Int
+  unbalanced        Boolean?
+  address_control   String
+  localiz_control   String
+  access_nivel      Int
+
+  @@map("stocks")
+}
+
+model info_stock {
+  id                   String @id @default(uuid())
+  branch_code          String
+  storage_code         String
+  document             Int?
+  date_count           String
+  total_stock_value    Float?
+  total_stock_quantity Int?
+  access_nivel         Int
+
+  @@map("info_stocks")
+}
+
+model addressed_stock {
+  id                 String @id @default(uuid())
+  addressed_quantity Int
+  product_code       String
+  product_desc       String
+  storage_code       String
+  branch_code        String
+  address_code       String
+  reserve_quantity   Int
+  transfer_quantity  Int
+  access_nivel       Int
+
+  @@map("addressed_stocks")
+}
+
+model count {
+  id             String  @id @default(uuid())
+  count_quantity Int
+  status         String
+  code_count     Int
+  address_code   String?
+  user_name      String
+  product_code   String
+  product_desc   String
+  storage_code   String
+  branch_code    String
+  access_nivel   Int
+
+  @@map("counts")
+}
+
+model invent_address {
+  id                  String  @id @default(uuid())
+  document            Int
+  date_count          String
+  branch_code         String
+  storage_code        String
+  address_code        String
+  status              String
+  situation           String
+  user_last_count     String?
+  difference_quantity Int?
+  original_quantity   Int?
+  count_quantity      Int?
+  access_nivel        Int
+
+  @@map("invent_addresses")
+}
+
+model invent_product {
+  id                  String  @id @default(uuid())
+  document            Int
+  date_count          String
+  branch_code         String
+  storage_code        String
+  address_code        String?
+  product_code        String
+  product_desc        String
+  status              String
+  situation           String
+  counted             Boolean
+  difference_quantity Int?
+  original_quantity   Int?
+  count_quantity      Int?
+  value_diferece      Float?
+  access_nivel        Int
+
+  @@map("invent_products")
+}
+
+model info_invent {
+  id                     String   @id @default(uuid())
+  document               Int
+  date_count             String
+  branch_code            String
+  storage_code           String
+  date_valid             String
+  origin                 String
+  tp_material            String
+  status                 String
+  invent_type            String
+  offline                Boolean
+  is_transfer            Boolean?
+  is_reserved_wms        Boolean?
+  is_zero_cost           Boolean?
+  is_unbalanced          Boolean?
+  is_wms_control         Boolean?
+  is_reserved_b2         Boolean?
+  order_quantity         Int?
+  accuracy_quanty        Float?
+  accuracy_value         Float?
+  accuracy_percent       Float?
+  accuracy_total         Float?
+  total_stock_value      Float?
+  total_inventory_value  Float?
+  total_stock_quanty     Int?
+  total_inventory_quanty Int?
+  difference_quanty      Int?
+  diference_value        Float?
+  access_nivel           Int
+
+  @@map("info_invents")
+}
+
+model number_control {
+  id           String @id @default(uuid())
+  number       Int
+  service      String
+  storage_code String
+  branch_code  String
+  access_nivel Int
+
+  @@map("number_controls")
+}
+
+model count_control {
+  id         String @id @default(uuid())
+  code_count Int
+  desc_count String
+
+  @@map("count_controls")
+}
