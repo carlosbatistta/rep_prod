@@ -1,0 +1,74 @@
+#include "protheus.ch"
+#include "topconn.ch"
+
+/*/
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÉÍÍÍÍÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍËÍÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍËÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍÍÍÍ»±±
+±±ºPrograma  ³ MTA410  º Autor ³ Luciano Júnior        º Data³ 12/02/25   º±±
+±±ÌÍÍÍÍÍÍÍÍÍÍØÍÍÍÍÍÍÍÍÍÍÊÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÊÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍ¹±±
+±±ºDescricao ³ Usado pra alimentar o campo C5_VOLUME1 ao salvar o pedido  ±±
+±±º          ³                                                           º±±
+±±ÈÍÍÍÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß
+/*/
+
+User Function MTA410()
+Local aArea := FWGetArea()
+Local lRet := .T.
+Local cFilial := ""
+Local cPedido := ""
+Local nPosQtd := 0
+Local nVolume := 0
+Local cEmpresa := ""
+
+//ApMsgInfo("Passou aqui... MTA410 ")
+
+
+If INCLUI .OR. ALTERA
+
+    cFilial := M->C5_FILIAL //xFilial("SC5")
+    cPedido := M->C5_NUM
+
+// Empresa atual
+        cEmpresa := FWCodEmp()
+      
+        // Só processa quando for a empresa '01'
+        If cEmpresa == "01"
+         
+            If AllTrim(M->C5_TIPO) != "D" .and. (M->C5_VOLUME1) = 0
+
+                nPosQtd := aScan(aHeader,{ |x| UPPER(ALLTRIM(x[2])) == "C6_QTDVEN"})
+
+                For n:=1 to Len(aCols)
+                    nVolume += aCols[n][nPosQtd] //aCols[1][5]
+                Next n
+
+                C5_VOLUME1 := nVolume
+
+            EndIf
+         EndIf   
+EndIf
+
+/*
+cQuery := "" //,Alltrim(aDadosTemp[1][1])
+cQuery += "SELECT Sum(C6_QTDVEN) VOLUME "+CHR(13)
+cQuery += "FROM "+RetSqlName("SC6")+" "+CHR(13)
+cQuery += "WHERE C6_FILIAL = '"+SC5->C5_FILIAL+"' " +CHR(13)
+cQuery += "AND C6_NUM = '"+SC5->C5_NUM+"' " +CHR(13)
+cQuery += "AND D_E_L_E_T_ <> '*' " +CHR(13)
+
+TcQuery cQuery Alias "TMP6" NEW
+
+DbSelectArea("TMP6")
+TMP6->(DbGoTop())
+C5_VOLUME1 := TMP6->VOLUME
+
+//ApMsgInfo("Passou aqui 2... MTA410 ")
+cQuery := ""
+TMP6->(dbCloseArea())
+*/
+
+FWRestArea(aArea)
+Return lRet
