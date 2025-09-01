@@ -15,9 +15,9 @@ USER FUNCTION NB00001()
 
     oBrowse := FWMBROWSE():New()
 
-    oBrowse:SetAlias("V02") //PASSO A TABELA QUE EU QUERO MOSTAR NO BROWSE
+    oBrowse:SetAlias("NB0") //PASSO A TABELA QUE EU QUERO MOSTAR NO BROWSE
 
-    oBrowse:SetDescription("FABRICANTES") //DESCRIï¿½ï¿½O/CABECALHO DA TELA 
+    oBrowse:SetDescription("Registro de Ocorrências") //CABECALHO DA TELA 
 
     oBrowse:ACTIVATE()
 
