@@ -54,8 +54,8 @@ Return aRotina
 
 /*/{Protheus.doc} ModelDef
 Modelo de dados na funcao CadNB0
-@author Luiz A.
-@since 16/11/2023
+@author Carlos Batista
+@since 01/09/2025
 @version 1.0
 @type function
 /*/
