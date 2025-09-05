@@ -13,7 +13,7 @@ Static cAliasMVC := "NB0"
 @type function
 /*/
 
-User Function CadNB0()
+User Function z()
     Local aArea   := FWGetArea()
     Local oBrowse
     Private aRotina := {}
@@ -44,16 +44,16 @@ Static Function MenuDef()
     Local aRotina := {}
 
     //Adicionando opcoes do menu
-    ADD OPTION aRotina TITLE "Visualizar" ACTION "VIEWDEF.CadNB0" OPERATION 1 ACCESS 0
-    ADD OPTION aRotina TITLE "Incluir" ACTION "VIEWDEF.CadNB0" OPERATION 3 ACCESS 0
-    ADD OPTION aRotina TITLE "Alterar" ACTION "VIEWDEF.CadNB0" OPERATION 4 ACCESS 0
-    ADD OPTION aRotina TITLE "Excluir" ACTION "VIEWDEF.CadNB0" OPERATION 5 ACCESS 0
-    ADD OPTION aRotina TITLE "Copiar" ACTION "VIEWDEF.CadNB0" OPERATION 9 ACCESS 0
+    ADD OPTION aRotina TITLE "Visualizar" ACTION "VIEWDEF.NB00004" OPERATION 1 ACCESS 0
+    ADD OPTION aRotina TITLE "Incluir" ACTION "VIEWDEF.NB00004" OPERATION 3 ACCESS 0
+    ADD OPTION aRotina TITLE "Alterar" ACTION "VIEWDEF.NB00004" OPERATION 4 ACCESS 0
+    ADD OPTION aRotina TITLE "Excluir" ACTION "VIEWDEF.NB00004" OPERATION 5 ACCESS 0
+    ADD OPTION aRotina TITLE "Copiar" ACTION "VIEWDEF.NB00004" OPERATION 9 ACCESS 0
 
 Return aRotina
 
 /*/{Protheus.doc} ModelDef
-Modelo de dados na funcao CadNB0
+Modelo de dados na funcao NB00004
 @author Carlos Batista
 @since 01/09/2025
 @version 1.0
@@ -69,7 +69,7 @@ Static Function ModelDef()
 
 
     //Cria o modelo de dados para cadastro
-    oModel := MPFormModel():New("CadNB0", bPre, bPos, /*bCommit*/, bCancel)
+    oModel := MPFormModel():New("NB00004", bPre, bPos, /*bCommit*/, bCancel)
     oModel:AddFields("NB0MASTER", /*cOwner*/, oStruct)
     oModel:SetDescription(cTitulo)
     oModel:GetModel("NB0MASTER"):SetDescription( "Dados de - " + cTitulo)
@@ -77,7 +77,7 @@ Static Function ModelDef()
 Return oModel
 
 /*/{Protheus.doc} ViewDef
-Visualizacao de dados na funcao CadNB0
+Visualizacao de dados na funcao NB00004
 @author Carlos Batista  
 @since 101/09/2025
 @version 1.0
@@ -85,7 +85,7 @@ Visualizacao de dados na funcao CadNB0
 /*/
 
 Static Function ViewDef()
-    Local oModel := FWLoadModel("CadNB0")
+    Local oModel := FWLoadModel("NB00004")
     Local oStruct := FWFormStruct(2, cAliasMVC)
     Local oView
 

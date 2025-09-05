@@ -19,9 +19,9 @@ USER FUNCTION VA00011()
 
     oBrowse := FWMBROWSE():New()
 
-    oBrowse:SetAlias("V02") //PASSO A TABELA QUE EU QUERO MOSTAR NO BROWSE
+    oBrowse:SetAlias("NB0") //PASSO A TABELA QUE EU QUERO MOSTAR NO BROWSE
 
-    oBrowse:SetDescription("FABRICANTES") //DESCRI��O/CABECALHO DA TELA 
+    oBrowse:SetDescription("OCORRENCIAS") //DESCRI��O/CABECALHO DA TELA 
 
     oBrowse:ACTIVATE()
 
@@ -59,13 +59,13 @@ Static Function MODELDEF()
 
     LOCAL oModel := NIL //OBJETO MODELO
 
-    LOCAL oStructV02 := FwFormStruct(1, "V02") //TRAZ A ESTRUTURA DA V02
+    LOCAL oStructV02 := FwFormStruct(1, "NB0") //TRAZ A ESTRUTURA DA V02
 
     oModel := MPFormModel():NEW("VA00011M",,,,)
 
     oModel:AddFields("FORMV02",,oStructV02) //PERMITIR EDITAR SOMENTE 1 REGISTRO POR VEZ
 
-    oModel:SetPrimaryKey({'V02_FILIAL','V02_CODIGO'}) //SETANDO A PRIMARY KEY
+    oModel:SetPrimaryKey({'NB0_FILIAL','NB0_CODIGO'}) //SETANDO A PRIMARY KEY
 
     oModel:SetDescription("CADASTRO DE FABRICANTES") //ADICIONANDO DESCRICAO AO MODELO 
 
@@ -81,7 +81,7 @@ Static Function VIEWDEF()
     LOCAL oView := NIL
     LOCAL oModel := FwLoadModel("VA00011")
 
-    LOCAL oStructV02 := FwFormStruct(2, "V02") //TRAZ A ESTRUTURA DA V02
+    LOCAL oStructV02 := FwFormStruct(2, "NB0") //TRAZ A ESTRUTURA DA V02
 
     oView := FWFormView():New()
     oView:SetModel(oModel)
