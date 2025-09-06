@@ -1,15 +1,130 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
+  // Você pode ajustar a pasta de saída se necessário, ex:
+  // output = "./src/generated/prisma-client"
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "postgresql" // Mantenha o provider correto para o seu banco (ex: "mysql", "sqlite")
   url      = env("DATABASE_URL")
+}
+
+// Modelo para usuários do sistema SGL
+model User {
+  id         String    @id @default(uuid())
+  code       Int       @unique @default(autoincrement()) // Código incremental para o usuário (0001, 0002, etc.)
+  name       String
+  email      String    @unique // Email deve ser único por usuário
+  password   String    // Senha hash
+  created_at DateTime? @default(now())
+  updated_at DateTime? @default(now()) @updatedAt // Automaticamente atualizado no update
+
+  profile_id String
+  profile    Profile   @relation(fields: [profile_id], references: [id])
+
+  @@map("users")
+}
+
+// Modelo para perfis de acesso (ex: Administrador, Gerente de Estoque)
+model Profile {
+  id     String   @id @default(uuid())
+  code   Int      @unique @default(autoincrement()) // Código incremental para o perfil
+  name   String   @unique // Nome do perfil deve ser único
+  nivel  Int      // Nível hierárquico de acesso (ex: 1=Admin, 2=Gerente)
+
+  users  User[]   // Relacionamento com usuários
+  access Access[] // Relacionamento com permissões específicas
+
+  @@map("profiles")
+}
+
+// Modelo para permissões de acesso detalhadas por perfil
+model Access {
+  id           String  @id @default(uuid())
+  permission   String  // A string da permissão (ex: "CREATE_USER", "VIEW_REPORTS", "EDIT_INVENTORY")
+  access_level Int     // Nível de acesso necessário para esta permissão (pode ser hierárquico)
+
+  profile_id   String
+  profile      Profile @relation(fields: [profile_id], references: [id])
+
+  @@map("accesses")
+}
+
+// Modelo para clientes que contratam os serviços/módulos
+model Client {
+  id           String    @id @default(uuid())
+  cnpj         String    @unique // CNPJ como String para formatação e unicidade
+  name_fantasy String    // Nome fantasia da empresa
+  name_company String    // Razão social da empresa
+  ie           String?   // Inscrição Estadual (opcional, pode ser String por formatação)
+  status       ClientStatus @default(ACTIVE) // Status do client (ativa, inativo)
+  city         String    // Cidade do cliente
+  cep          String    // CEP como String para formatação
+  street       String    // Rua/Endereço
+  district     String    // Bairro
+  number       String    // Número do endereço (pode incluir complementos)
+  created_at   DateTime? @default(now())
+  updated_at   DateTime? @default(now()) @updatedAt
+
+  licenses License[] // Licenças associadas a este cliente
+
+  @@map("clients")
+}
+
+// Modelo para os serviços/módulos oferecidos (ex: WMS, Gestão de Frota, Roteirizador)
+model Service {
+  id         String    @id @default(uuid())
+  code       Int       @unique @default(autoincrement()) // Código incremental para o serviço/módulo
+  name       String    @unique // Nome do serviço/módulo deve ser único
+  created_at DateTime? @default(now())
+  updated_at DateTime? @default(now()) @updatedAt
+
+  licenses License[] // Licenças que contratam este serviço
+
+  @@map("services")
+}
+
+// Modelo para as licenças contratadas pelos clientes para os serviços
+model License {
+  id         String        @id @default(uuid())
+  key        String        @unique // Chave de licença única (UUID) que será usada para validação
+  status     LicenseStatus @default(ACTIVE) // Status da licença (ativa, inativa, expirada)
+  type       LicenseType   @default(OUR_SYSTEM) // Tipo de integração (com nosso sistema ou ERP do cliente)
+
+  // Campos para conexão ao BD do cliente (se type for CLIENT_ERP)
+  db_connection_string String? // URL de conexão do banco de dados do cliente
+  db_user              String? // Usuário do banco de dados do cliente
+  db_password          String? // Senha do banco de dados do cliente (ATENÇÃO: Considerar criptografia!)
+
+  valid_until DateTime    // Data de validade da licença (Adicionado para controle de expiração)
+  created_at  DateTime?   @default(now())
+  updated_at  DateTime?   @default(now()) @updatedAt
+
+  client_id  String
+  client     Client      @relation(fields: [client_id], references: [id])
+
+  service_id String
+  service    Service     @relation(fields: [service_id], references: [id])
+
+  @@map("licenses")
+}
+
+// Enums para melhorar a clareza e restringir valores aceitos
+enum LicenseStatus {
+  ACTIVE    // Licença ativa e válida
+  INACTIVE  // Licença desativada manualmente
+  EXPIRED   // Licença que passou da data de validade
+}
+
+enum LicenseType {
+  OUR_SYSTEM // O serviço usa nosso sistema de gestão (ex: nosso WMS)
+  CLIENT_ERP // O serviço se integra ao ERP existente do cliente
+}
+
+enum ClientStatus {
+  ACTIVE
+  INACTIVE
 }
