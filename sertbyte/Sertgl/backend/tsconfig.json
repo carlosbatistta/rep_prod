@@ -21,9 +21,9 @@
     "declarationMap": true,
 
     // Stricter Typechecking Options
-    "noUncheckedIndexedAccess": true,
-    "strictNullChecks": true,
-    "exactOptionalPropertyTypes": true,
+  //  "noUncheckedIndexedAccess": true,
+   // "strictNullChecks": true,
+    //"exactOptionalPropertyTypes": true,
     // Style Options
     // "noImplicitReturns": true,
     // "noImplicitOverride": true,

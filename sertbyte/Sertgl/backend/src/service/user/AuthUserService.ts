@@ -1,7 +1,7 @@
 
 import prismaClient from "../../prisma/index.js";
 import { compare } from 'bcryptjs'
-import { sign } from 'jsonwebtoken'
+import jwt from 'jsonwebtoken';
 
 interface AuthRequest{
   email: string;
@@ -31,12 +31,16 @@ class AuthUserService{
 
 
     // Se deu tudo certo vamos gerar o token pro usuario.
-    const token = sign(
+    const jwtSecret = process.env.JWT_SECRET_KEY;
+    if (!jwtSecret) {
+      throw new Error("JWT secret key is not defined in environment variables");
+    }
+    const token = jwt.sign(
       {
         name: user.name,
         email: user.email
       },
-      process.env.JWT_SECRET,
+      jwtSecret,
       {
         subject: user.id,
         expiresIn: '30d'
