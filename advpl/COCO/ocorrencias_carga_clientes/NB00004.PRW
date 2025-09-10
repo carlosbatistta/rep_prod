@@ -13,7 +13,7 @@ Static cAliasMVC := "NB0"
 @type function
 /*/
 
-User Function z()
+User Function NB00004()
     Local aArea   := FWGetArea()
     Local oBrowse
     Private aRotina := {}

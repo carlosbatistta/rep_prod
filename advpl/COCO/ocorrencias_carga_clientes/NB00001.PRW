@@ -22,6 +22,7 @@ USER FUNCTION NB00001()
     oBrowse:ACTIVATE()
 
 
+
 RETURN
 
 // -------------------- CRIANDO O MENU --------------------------
