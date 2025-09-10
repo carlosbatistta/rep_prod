@@ -1,2 +1,2 @@
 # public
-Projetos abertos
+Migração para o schema: yarn prisma migrate dev

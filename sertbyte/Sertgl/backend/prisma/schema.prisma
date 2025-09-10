@@ -59,13 +59,15 @@ model Client {
   cnpj         String    @unique // CNPJ como String para formatação e unicidade
   name_fantasy String    // Nome fantasia da empresa
   name_company String    // Razão social da empresa
-  ie           String?   // Inscrição Estadual (opcional, pode ser String por formatação)
+  ie           Int?   // Inscrição Estadual (opcional, pode ser String por formatação)
   status       ClientStatus @default(ACTIVE) // Status do client (ativa, inativo)
   city         String    // Cidade do cliente
-  cep          String    // CEP como String para formatação
+  cod_city     Int       // Código do IBGE da cidade
+  cep          Int    // CEP como String para formatação
   street       String    // Rua/Endereço
   district     String    // Bairro
   number       String    // Número do endereço (pode incluir complementos)
+  email        String    // Email de contato do cliente
   created_at   DateTime? @default(now())
   updated_at   DateTime? @default(now()) @updatedAt
 
