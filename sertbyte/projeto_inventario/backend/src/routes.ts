@@ -1,6 +1,4 @@
-import { Router } from 'express';
-import multer from 'multer';
-import uploadConfig from './config/multer'
+import { Router, type Request, type Response } from 'express';
 
 import { CreateUserController } from './controllers/user/CreateUserController'
 import { AuthUserController } from './controllers/user/AuthUserController'
