@@ -17,7 +17,7 @@ interface ClientRequest {
     email: string
 }
 
-export class AlterProfileController{
+export class AlterClientService{
     async execute({ id, cnpj, name_fantasy, name_company, ie, status, city, cod_city, cep, street, district, number, email }: ClientRequest) {
         if (!id) {
             throw new Error("ID do cliente é obrigatório");
@@ -51,3 +51,4 @@ export class AlterProfileController{
 
         return updatedClient
     }
+}

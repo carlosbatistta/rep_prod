@@ -1,24 +1,17 @@
-import type { Request, Response } from 'express'
-import type { RequestHandler } from 'express'
-import {DeleteClientService} from './DeleteClientService.js';
+import prismaClient from '../../prisma/index.js'
 
-class DeleteClientController {
-    handle: RequestHandler = async (req: Request, res: Response) => {
-        try {
-            const { id } = req.body
-
-            const deleteClientService = new DeleteClientService()
-
-            const client = await deleteClientService.execute({
-                id
-            })
-
-            res.json(client)
-        } catch (error: any) {
-            console.error(error.message)
-            res.status(400).json({ error: error.message })
-        }
-    }
+interface ProfileRequest {
+    id: string;
 }
 
-export { DeleteClientController }
+export class DeleteClientService {
+    async execute({ id }: ProfileRequest) {
+        const client = await prismaClient.client.delete({
+            where: {
+                id: id,
+            },
+        });
+
+        return client;
+    }
+}

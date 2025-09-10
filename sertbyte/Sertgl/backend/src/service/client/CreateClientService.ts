@@ -1,36 +1,59 @@
-import type { Request, Response } from 'express'
-import type { RequestHandler } from 'express'  
-import { CreateClientService } from './CreateClientService.js';
+import prismaClient from "../../prisma/index.js";
 
-class AlterClientController {
-    handle: RequestHandler = async (req: Request, res: Response) => {
-        try {
-            const { name, cnpj, name_fantasy, name_company, ie, city, cod_city, cep, street, district, number, complement, email } = req.body;
+interface ClientRequest {
+    id: string;
+    cnpj: string;
+    name_fantasy: string;
+    name_company: string;
+    ie: string;
+    status: string;
+    city: string;
+    cod_city: string;
+    cep: string;
+    street: string;
+    district: string;
+    number: string;
+    email: string;
+}
 
-            const alterClientService = new AlterClientService();
+export class CreateClientService {
+    async execute({ id, cnpj, name_fantasy, name_company, ie, status, city, cod_city, cep, street, district, number, email }: ClientRequest) {
+        if (!cnpj && !name_fantasy && !name_company && !ie && !status && !city && !cod_city && !cep && !street && !district && !number && !email) { 
+            throw new Error("Pelo menos um campo deve ser preenchido");
+        }
 
-            const client = await alterClientService.execute({
-                name,
+        const client = await prismaClient.client.create({
+            data:{
                 cnpj,
                 name_fantasy,
                 name_company,
-                ie,
+                ie: ie ? Number(ie) : undefined,
+                status: status as any, // Cast to 'any' or 'ClientStatus' if imported
                 city,
-                cod_city,
-                cep,
+                cod_city: cod_city ? Number(cod_city) : undefined,
+                cep: cep ? Number(cep) : undefined,
                 street,
                 district,
                 number,
-                complement,
                 email
-            });
+            },
+            select:{
+                id: true,
+                cnpj: true,
+                name_fantasy: true,
+                name_company: true,
+                ie: true,
+                status: true,
+                city: true,
+                cod_city: true,
+                cep: true,
+                street: true,
+                district: true,
+                number: true,
+                email: true
+            }
+        })
 
-            res.json(client);
-        } catch (error: any) {
-            console.error(error.message);
-            res.status(400).json({ error: error.message });
-        }
+        return client;
     }
 }
-
-export { AlterClientController }
