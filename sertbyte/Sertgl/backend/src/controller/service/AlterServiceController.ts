@@ -2,7 +2,7 @@ import type { Request, Response } from 'express'
 import type { RequestHandler } from 'express'
 import { AlterService } from '../../service/service/AlterService.js';
 
-class AlterClientController {
+class AlterServiceController {
     handle: RequestHandler = async (req: Request, res: Response) => {
         try {
             const { name, code } = req.body;
@@ -21,4 +21,4 @@ class AlterClientController {
     }
 }
 
-export { AlterClientController }
+export { AlterServiceController }
