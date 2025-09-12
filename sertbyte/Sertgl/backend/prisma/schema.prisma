@@ -33,7 +33,7 @@ model Profile {
   id     String   @id @default(uuid())
   code   Int      @unique @default(autoincrement()) // Código incremental para o perfil
   name   String   @unique // Nome do perfil deve ser único
-  nivel  Int      // Nível hierárquico de acesso (ex: 1=Admin, 2=Gerente)
+  level  Int      // Nível hierárquico de acesso (ex: 1=Admin, 2=Gerente)
 
   users  User[]   // Relacionamento com usuários
   access Access[] // Relacionamento com permissões específicas
@@ -92,12 +92,12 @@ model Service {
 // Modelo para as licenças contratadas pelos clientes para os serviços
 model License {
   id         String        @id @default(uuid())
-  key        String        @unique // Chave de licença única (UUID) que será usada para validação
+  code       Int           @unique @default(autoincrement())// Chave de licença única (UUID) que será usada para validação
   status     LicenseStatus @default(ACTIVE) // Status da licença (ativa, inativa, expirada)
   type       LicenseType   @default(OUR_SYSTEM) // Tipo de integração (com nosso sistema ou ERP do cliente)
 
   // Campos para conexão ao BD do cliente (se type for CLIENT_ERP)
-  db_connection_string String? // URL de conexão do banco de dados do cliente
+  db_connection        String? // URL de conexão do banco de dados do cliente
   db_user              String? // Usuário do banco de dados do cliente
   db_password          String? // Senha do banco de dados do cliente (ATENÇÃO: Considerar criptografia!)
 

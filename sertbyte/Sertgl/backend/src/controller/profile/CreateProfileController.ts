@@ -5,14 +5,13 @@ import { CreateProfileService } from '../../service/profile/CreateProfileService
 class CreateProfileController {
     handle: RequestHandler = async (req: Request, res: Response) => {
         try {
-            const { name, nivel } = req.body;
+            const { name, level } = req.body;
 
             const createProfileService = new CreateProfileService();
 
             const profile = await createProfileService.execute({
                 name,
-                nivel
-
+                level
             });
 
             res.json(profile);

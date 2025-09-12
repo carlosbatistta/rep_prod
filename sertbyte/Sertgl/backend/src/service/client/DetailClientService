@@ -1,0 +1,12 @@
+import prismaClient from "../../prisma/index.js"
+
+export class DetailClientService{
+    async execute(cnpj: string){
+        const client = await prismaClient.client.findUnique({
+            where: {
+                cnpj: cnpj
+            }
+        })
+        return client
+    }
+}

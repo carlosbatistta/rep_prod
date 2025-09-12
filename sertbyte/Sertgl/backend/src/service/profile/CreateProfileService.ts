@@ -2,12 +2,12 @@ import prismaClient from '../../prisma/index.js'
 
 interface ProfileRequest {
     name: string;
-    nivel: number;
+    level: number;
 
 }
 
 export class CreateProfileService {
-    async execute({ name, nivel }: ProfileRequest) {
+    async execute({ name, level }: ProfileRequest) {
         if (!name) {
             throw new Error("Name is required");
         }
@@ -15,12 +15,12 @@ export class CreateProfileService {
         const profile = await prismaClient.profile.create({
             data: {
                 name,
-                nivel,
+                level,
             },
             select: {
                 id: true,
                 name: true,
-                nivel: true,
+                level: true,
             },
         });
 
