@@ -3,16 +3,21 @@ import prismaClient from '../../prisma/index.js'
 interface ClientRequest { 
     id: string;
     name: string;
-    level: number;
+    email: string;
+    password: string;
 }
 
-class AlterUserService {
-    async execute({ name, level }: ClientRequest) {
+export class AlterUserService {
+    async execute({ id, name, email, password }: ClientRequest) {
         const user = await prismaClient.user.update({
             where: { 
-                id: id, 
+                id: id 
             },
-            data: { name, level }
+            data: { 
+                name,
+                email,
+                password
+            }
         });
         return user;
     }
